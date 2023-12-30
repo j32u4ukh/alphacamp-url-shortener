@@ -1,2 +1,34 @@
-<div class="container mt-5">
+<header>
+    <h1>URL Shortener</h1>
+    <img src="image/ExportedContentImage.png">
+</header>
+<div class="container mt-5">    
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="url" class="sr-only">Password</label>
+            <input class="form-control" type="text" id="url" placeholder="Default input">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+    </form>
+
+    <h3>Success! Please use this link:</h3>
+    <a href="#">123456</a>
+    <button onclick="copyToClipboard()">複製到剪貼簿</button>
 </div>
+
+<script>
+function copyToClipboard() {
+    /* 取得輸入框元素 */
+    var inputElement = document.getElementById("url");
+
+    /* 選擇文本 */
+    inputElement.select();
+    inputElement.setSelectionRange(0, 99999); /* 為了支援移動裝置 */
+
+    /* 複製文本到剪貼簿 */
+    document.execCommand("copy");
+
+    /* 提示用戶已複製 */
+    alert("已複製到剪貼簿: " + inputElement.value);
+}
+</script>
