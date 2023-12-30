@@ -2,33 +2,67 @@
     <h1>URL Shortener</h1>
     <img src="image/ExportedContentImage.png">
 </header>
-<div class="container mt-5">    
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="url" class="sr-only">Password</label>
-            <input class="form-control" type="text" id="url" placeholder="Default input">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
-    </form>
-
-    <h3>Success! Please use this link:</h3>
-    <a href="#">123456</a>
-    <button onclick="copyToClipboard()">複製到剪貼簿</button>
+<div class="container mt-5">
+   <div class="form-group mx-sm-3 mb-2 input">
+        <label for="url" class="sr-only">Password</label>
+        <input class="form-control" type="text" id="url" placeholder="Default input">
+    </div>
+    <button type="button" class="btn btn-primary mb-2 input" id="send-btn">Confirm identity</button> 
+    <h3 class="output" hidden="">Success! Please use this link:</h3>
+    <a href="#" id="short" class="output" hidden="">123456</a>
+    <button type="button" class="btn btn-info output" id="copy-btn" hidden="">複製到剪貼簿</button>
 </div>
 
-<script>
-function copyToClipboard() {
-    /* 取得輸入框元素 */
-    var inputElement = document.getElementById("url");
+<script type="text/javascript">
+    const url = "http://localhost:3000/shortener";
+    const inputs = document.querySelectorAll('.input');
+    const outputs = document.querySelectorAll('.output');
+    const urlText = document.querySelector('#url');
+    const sendBtn = document.querySelector('#send-btn')
+    const costBtn = document.querySelector("#copy-btn");
+    const short = document.querySelector("#short");
+    let state = false;
 
-    /* 選擇文本 */
-    inputElement.select();
-    inputElement.setSelectionRange(0, 99999); /* 為了支援移動裝置 */
+    function switchState(){
+        state = !state;
 
-    /* 複製文本到剪貼簿 */
-    document.execCommand("copy");
+        inputs.forEach((element)=>{
+            element.hidden = !element.hidden;
+        })
+        outputs.forEach((element)=>{
+            element.hidden = !element.hidden;
+        })
+    }
 
-    /* 提示用戶已複製 */
-    alert("已複製到剪貼簿: " + inputElement.value);
-}
+    sendBtn.addEventListener("click", function onUrlSent(event){
+        let text = urlText.value.trim();
+        urlText.value = ""
+        console.log(`url: ${text}`);
+        axios
+        .get(`${url}?url=${text}`)
+        .then((res)=>{
+            console.log(res);
+            const result = res.data.result
+            short.innerHTML = result
+            short.href = result
+            switchState()            
+        })
+        .catch((error)=>{
+            console.error('縮短失敗: ', error);
+        })
+    })
+
+    {{!-- 使用 Clipboard API 複製文本到剪貼簿 --}}
+    costBtn.addEventListener("click", function copyToClipboard(event){
+        navigator.clipboard.writeText(short.href)
+            .then(() => {
+                console.log("已複製到剪貼簿: " + short.href);
+            })
+            .catch(err => {
+                console.error('複製失敗: ', err);
+            })
+            .finally(()=>{
+                switchState()
+            })
+    })
 </script>
