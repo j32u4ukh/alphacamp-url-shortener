@@ -3,9 +3,12 @@ const { engine } = require("express-handlebars");
 const app = express();
 const port = 3000;
 const base62 = initBase62();
+const N_SHORT = 5;
+const fs = require("fs").promises;
+const PATH = "./public/data/urls.json";
 
 // key: origin url, vaue: short
-const url_short_map = require("./public/data/urls.json");
+const url_short_map = require(PATH);
 
 // key: short, vaue: origin url
 const short_url_map = {};
@@ -36,18 +39,27 @@ function getShort(url) {
   // console.log(`short: ${short}, url: ${url}`);
   url_short_map[url] = short;
   short_url_map[short] = url;
+  writeFile();
   return short;
 }
 
 // 生成 Short 雜湊值
-function generateHash(len = 10) {
+function generateHash() {
   let hash = "";
   let rand;
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < N_SHORT; i++) {
     rand = Math.floor(Math.random() * 62);
     hash += base62.substring(rand, rand + 1);
   }
   return hash;
+}
+
+async function writeFile() {
+  try {
+    await fs.writeFile(PATH, JSON.stringify(url_short_map));
+  } catch (error) {
+    console.error("Error writing file:", error);
+  }
 }
 
 app.engine(".hbs", engine({ extname: ".hbs" }));
