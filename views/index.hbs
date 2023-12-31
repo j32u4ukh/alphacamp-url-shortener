@@ -4,13 +4,12 @@
 </header>
 <div class="container mt-5">
    <div class="form-group mx-sm-3 mb-2 input">
-        <label for="url" class="sr-only">Password</label>
         <input class="form-control" type="text" id="url" placeholder="Default input">
     </div>
-    <button type="button" class="btn btn-primary mb-2 input" id="send-btn">Confirm identity</button> 
+    <button type="button" class="btn btn-light mb-2 input" id="send-btn">Shorten</button> 
     <h3 class="output" hidden="">Success! Please use this link:</h3>
     <a href="#" id="short" class="output" hidden="">123456</a>
-    <button type="button" class="btn btn-info output" id="copy-btn" hidden="">複製到剪貼簿</button>
+    <button type="button" class="btn btn-primary output" id="copy-btn" hidden="">Copy</button>
 </div>
 
 <script type="text/javascript">
@@ -37,11 +36,9 @@
     sendBtn.addEventListener("click", function onUrlSent(event){
         let text = urlText.value.trim();
         urlText.value = ""
-        console.log(`url: ${text}`);
         axios
         .get(`${url}?url=${text}`)
         .then((res)=>{
-            console.log(res);
             const result = res.data.result
             short.innerHTML = result
             short.href = result

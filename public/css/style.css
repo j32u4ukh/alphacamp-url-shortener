@@ -7,6 +7,19 @@ header {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    margin: 50px;
+}
+
+#url{
+    width: 20vw;
+    margin: 10px;
+}
+
+#send-btn{
+    border: 2px solid #76a2f2;
+    color: #76a2f2;
+    width: 10vw;
+    margin: 10px;
 }
 
 img {
@@ -17,4 +30,14 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#short{
+    font-weight: bolder;
+    color: #5e8fe3;
+    margin: 10px;
+}
+
+#copy-btn {
+    margin: 10px;
 }
