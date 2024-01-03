@@ -8,7 +8,7 @@
     </div>
     <button type="button" class="btn btn-light mb-2 input" id="send-btn">Shorten</button> 
     <h3 class="output" hidden="">Success! Please use this link:</h3>
-    <a href="#" id="short" class="output" hidden="">123456</a>
+    <a href="#" id="short" class="output" hidden="" target="_blank">123456</a>
     <button type="button" class="btn btn-primary output" id="copy-btn" hidden="">Copy</button>
 </div>
 
@@ -75,7 +75,7 @@
     costBtn.addEventListener("click", function copyToClipboard(event){
         navigator.clipboard.writeText(short.href)
             .then(() => {
-                console.log("已複製到剪貼簿: " + short.href);
+                alert("已複製到剪貼簿: " + short.href);
             })
             .catch(err => {
                 console.error('複製失敗: ', err);
