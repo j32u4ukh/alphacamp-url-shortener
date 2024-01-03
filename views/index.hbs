@@ -33,20 +33,42 @@
         })
     }
 
+    function urlValidator(inputUrl){
+        let isValid = false;
+        let result = "";
+        try{
+            const outputUrl = new URL(inputUrl);
+            isValid = outputUrl.protocol === 'http:' || outputUrl.protocol === 'https:'
+            
+            if(isValid){
+                result = outputUrl.href
+            }            
+        }catch (error){
+            result = error
+        }
+        return {isValid: isValid, result: result};
+    }
+    
     sendBtn.addEventListener("click", function onUrlSent(event){
         let text = urlText.value.trim();
         urlText.value = ""
-        axios
-        .get(`${url}?url=${text}`)
-        .then((res)=>{
-            const result = res.data.result
-            short.innerHTML = result
-            short.href = result
-            switchState()            
-        })
-        .catch((error)=>{
-            console.error('縮短失敗: ', error);
-        })
+        const validator = urlValidator(text);
+
+        if(validator.isValid){
+            axios
+            .get(`${url}?url=${validator.result}`)
+            .then((res)=>{
+                const result = res.data.result
+                short.innerHTML = result
+                short.href = result
+                switchState()            
+            })
+            .catch((error)=>{
+                console.error('縮短失敗: ', error);
+            })
+        }else{
+            alert(`無效 url: '${text}'`);
+        }
     })
 
     {{!-- 使用 Clipboard API 複製文本到剪貼簿 --}}
